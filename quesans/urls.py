@@ -18,11 +18,14 @@ from django.urls import path
 from api import views
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.routers import DefaultRouter
+
+
 router=DefaultRouter()
 router.register("user/signup",views.SignupView,basename="sign")
 router.register("ques",views.QuesView,basename="ques")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('token/',ObtainAuthToken.as_view())
+    
+    path('index/',views.TemplateView.as_view(),name="index")
 ]+router.urls
