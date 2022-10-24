@@ -21,11 +21,13 @@ from rest_framework.routers import DefaultRouter
 
 
 router=DefaultRouter()
-router.register("user/signup",views.SignupView,basename="sign")
-router.register("ques",views.QuesView,basename="ques")
+# router.register("user/signup",views.SignupView,basename="sign")
+# router.register("ques",views.QuesView,basename="ques")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     
-    path('index/',views.TemplateView.as_view(),name="index")
+    path('index/',views.TemplateView.as_view(),name="index"),
+    path('register/',views.Signupview.as_view(),name="sign"),
+    path("login/",views.LoginView.as_view(),name="log")
 ]+router.urls
