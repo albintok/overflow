@@ -11,7 +11,7 @@ class MyUser(AbstractUser):
 
 class Questions(models.Model):
     questin=models.CharField(max_length=300)
-    image=models.ImageField(null=True,upload_to="qimages")
+    image=models.ImageField(null=True,upload_to="qimages",blank=True)
     user=models.ForeignKey(MyUser,on_delete=models.CASCADE)
     created_date=models.DateTimeField(auto_now_add=True)
     is_active=models.BooleanField(default=True)

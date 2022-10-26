@@ -6,15 +6,25 @@ from rest_framework.response import Response
 from rest_framework import authentication,permissions
 from rest_framework.decorators import action
 from django.views.generic import View,TemplateView
-from api.forms import RegistrationForm,LoginForm
-from django.views.generic import CreateView
+from api.forms import RegistrationForm,LoginForm,QuestinForm
+from django.views.generic import CreateView,FormView,ListView
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
-
+from django.utils.decorators import method_decorator
 # Create your views here.
-class TemplateView(TemplateView):
-    template_name="index.html"
+class TemplateView(CreateView,ListView):
+    template_name="home.html"
+    form_class=QuestinForm
+    model=Questions
+    success_url=reverse_lazy("index")
+    context_object_name="questins"
+
+    def form_valid(self, form):
+        form.instance.user=self.request.user
+        return super().form_valid(form)
+    def get_queryset(self):
+        return Questions.objects.all().exclude(user=self.request.user)
 
 class Signupview(CreateView):
     model=MyUser
@@ -22,10 +32,18 @@ class Signupview(CreateView):
     template_name="register.html"
     success_url=reverse_lazy("sign")
 
-class LoginView(View):
-    def get(self,request,*args,**kwargs):
-        form=LoginForm
-        return render(request,"login.html",{"form":form})
+def required_signin(fn):
+    def inner(request,*args,**kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request,"u must login")
+            return redirect("log")
+        else:
+            return fn(request,*args,**kwargs)
+    return inner
+
+class LoginView(FormView):
+    form_class=LoginForm
+    template_name="login.html"
     def post(self,request,*args,**kwargs):
         form=LoginForm(request.POST)
         if form.is_valid():
@@ -41,8 +59,10 @@ class LoginView(View):
                 return redirect("index")
 
  
-
-
+@required_signin
+def sign_out(request,*args,**kwargs):
+    logout(request)
+    return redirect("log")
 
 
 

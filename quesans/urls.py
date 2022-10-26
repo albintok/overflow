@@ -18,6 +18,8 @@ from django.urls import path
 from api import views
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.routers import DefaultRouter
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 router=DefaultRouter()
@@ -29,5 +31,5 @@ urlpatterns = [
     
     path('index/',views.TemplateView.as_view(),name="index"),
     path('register/',views.Signupview.as_view(),name="sign"),
-    path("login/",views.LoginView.as_view(),name="log")
-]+router.urls
+    path("",views.LoginView.as_view(),name="log")
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
