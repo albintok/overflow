@@ -1,0 +1,36 @@
+{%extends 'base.html'%}
+{% block body_block %}
+<div class="container">
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <div class="card mb-4">
+                {%if questin.image%}
+                <a href="#!"><img class="card-img-top" src="{{questin.image.url}}" alt="..." /></a>
+    
+                {%endif%}
+                <div class="card-body">
+                    <h6>{{questin.user}}</h6>
+                   <div class="small text-muted">{{questin.created_date}}</div>
+                   <p>{{q.user}}</p>
+                   <h2 class="card-title h4">{{questin.questin}}</h2>
+                   <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque,
+                      nulla.</p>
+                    <form action="{%url 'addans' questin.id%}" method="post">
+                        {%csrf_token%}
+                        <textarea name="answer" id="" cols="50" rows="4"></textarea>
+                        <div><input type="submit" value="submit " class="btn-dark"></div>
+
+                    </form>
+                   
+                </div>
+             </div>
+
+        </div>
+        <div class="col-2">
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

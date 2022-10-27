@@ -7,12 +7,14 @@ from rest_framework import authentication,permissions
 from rest_framework.decorators import action
 from django.views.generic import View,TemplateView
 from api.forms import RegistrationForm,LoginForm,QuestinForm
-from django.views.generic import CreateView,FormView,ListView
+from django.views.generic import CreateView,FormView,ListView,DetailView
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from django.utils.decorators import method_decorator
 # Create your views here.
+
+
 class TemplateView(CreateView,ListView):
     template_name="home.html"
     form_class=QuestinForm
@@ -58,7 +60,24 @@ class LoginView(FormView):
                 messages.error(request,"login failed")
                 return redirect("index")
 
- 
+class QuestinDetailView(DetailView):
+    model= Questions
+    template_name="questin-detail.html"
+    pk_url_kwarg: str="id"
+    context_object_name: str="questin"
+
+
+#localhost:8000/questin/{id}/answer
+def add_Answer(request,*args,**kwargs):
+    qid=kwargs.get("id")
+    quest=Questions.objects.get(id=qid)
+    ans=request.POST.get("answer")
+    Answers.objects.create(user=request.user,answer=ans,ques=quest)
+    return redirect("index")
+
+
+
+
 @required_signin
 def sign_out(request,*args,**kwargs):
     logout(request)
