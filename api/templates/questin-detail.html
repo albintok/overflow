@@ -19,11 +19,35 @@
                     <form action="{%url 'addans' questin.id%}" method="post">
                         {%csrf_token%}
                         <textarea name="answer" id="" cols="50" rows="4"></textarea>
-                        <div><input type="submit" value="submit " class="btn-dark"></div>
+                        <div><input type="submit" value="Add Your Answer " class="btn-dark"></div>
 
                     </form>
                    
                 </div>
+                <p>
+                    
+                    <button class="btn btn-primary ms-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                      ANSWERS
+                    </button>
+                  </p>
+                  <div class="collapse" id="collapseExample">
+                    <div class="card card-body">
+                        <ul class="list-group">
+                            {%for ans in questin.fetch_answers %}
+                            <li class="list-group-item">
+                                
+                                   <h6>{{ans.answer}}</h6> 
+                                    <p class="card-text">
+                                    Replayed By {{ans.user}} on {{ans.date}}
+                                    <a href="{%url 'upvote' ans.id %}">upvote <span>{{ans.up_voted.all.count}}</span></a>
+                                </p>
+                               
+                                
+                            </li>
+                            {%endfor%}
+                        </ul>
+                    </div>
+                  </div>
              </div>
 
         </div>

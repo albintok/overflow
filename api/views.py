@@ -75,6 +75,13 @@ def add_Answer(request,*args,**kwargs):
     Answers.objects.create(user=request.user,answer=ans,ques=quest)
     return redirect("index")
 
+#localhost:8000/ans/{id}/upvote
+def upvote(request,*args,**kwargs):
+    ans_id=kwargs.get("id")
+    ans=Answers.objects.get(id=ans_id)
+    ans.up_voted.add(request.user)
+    ans.save()
+    return redirect("detail",id=ans.ques.id)
 
 
 

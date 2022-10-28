@@ -35,4 +35,6 @@ urlpatterns = [
     path("",views.LoginView.as_view(),name="log"),
     path("details/<int:id>",views.QuestinDetailView.as_view(),name="detail"),
     path("questin/<int:id>/add_answer",views.add_Answer,name="addans"),
+    path("answer/<int:id>/add_vote",views.upvote,name="upvote"),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,7 +1,9 @@
 from distutils.command.upload import upload
 from email.policy import default
+from itertools import count
 from django.db import models
 from django.contrib.auth.models import User,AbstractUser
+from django.db.models import Count
 
 
 class MyUser(AbstractUser):
@@ -15,6 +17,11 @@ class Questions(models.Model):
     user=models.ForeignKey(MyUser,on_delete=models.CASCADE)
     created_date=models.DateTimeField(auto_now_add=True)
     is_active=models.BooleanField(default=True)
+
+    @property
+    def fetch_answers(self):
+        answers=self.answers_set.all().annotate(count=Count('up_voted')).order_by(-count)
+        return answers
 
     def __str__(self):
         return self.questin
